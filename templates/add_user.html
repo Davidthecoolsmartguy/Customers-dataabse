@@ -1,0 +1,37 @@
+﻿{% extends "layouts/layout1.html" %}
+# enter site title in betwen custom title
+{% block title %}
+Our custom title
+{% endblock %}
+
+
+{% block content %}
+
+{% macro render_field(field) %}
+<div class="form-group">
+	{% if field.name != "submit" %}
+	{{ field.label }}
+	{% endif %}
+	{{ field(class="form-control") }}
+</div>
+{% endmacro %}
+
+<div class="container">
+
+	<div class="row">
+
+		<div class="col-lg-12">
+			<h1 class="page-header">Add Customers</h1>
+		</div>
+
+		<form method="post" action="/add_customer">
+			<p class="name">{{ render_field(form.first_name) }} <p>
+			{{ render_field(form.last_name) }}
+			{{ render_field(form.phone) }}
+			{{ render_field(form.device) }}
+			{{ render_field(form.problem) }}
+			{{ render_field(form.submit)}}
+		</form>
+	</div>
+</div>
+{% endblock %}

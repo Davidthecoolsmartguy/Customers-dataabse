@@ -1,0 +1,80 @@
+{% extends "layouts/layout1.html" %}
+Active tasks
+
+
+{% block content %}
+
+
+
+<!-- isotope-->
+<script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js"></script>
+<link href="static/css/isotope.css" rel="stylesheet">
+<script src="static/js/isotope_filters.js"></script>
+<!-- end istope-->
+
+
+
+
+
+
+
+
+<div class="container">
+
+  <div class="row">
+
+
+<div class="col-lg-6">
+
+      <h1 class="page-header">Active Tasks</h1>
+      </div>
+          <div class="col-lg-6">
+
+
+<p><input class="page-header" type="text" id="quicksearch" placeholder="Search" /></p>
+</div>
+
+
+    </div>
+  </div>
+  </div>
+
+
+<div class="container">
+
+  <div class="row">
+    <div class="isotope">
+    {% for myuser in user %}
+
+    <div class="col-lg-3 col-md-4 col-xs-6 thumb element-item  {{ myuser.device }} ">
+
+     <div class="id"> ID:{{ myuser.id }}</div><br>
+        <div class="first_name"> Name:{{ myuser.first_name }}</div>
+
+    <div class="last_name"> lastname:{{ myuser.last_name }}</div>
+
+    <div class="phone"> Phone:{{ myuser.phone }}</div>
+    <div class="device"> Device:{{ myuser.device }}</div>
+
+    <div class="checkin"> Date:{{ myuser.checkin }}</div>
+     <hr>
+     <div class="problem"> probelm:{{ myuser.problem }}</div>
+      <hr>
+
+    
+<form method="Post" action="/active_tasks" >
+
+        <button type="submit" name="submit" style="float: left;" value="{{ myuser.id }}" class="btn btn-defult">Delete</button>
+        <button type="submit" name="submit" style="float: right;" value="Do Something Else" class="btn btn-primary">Invoice</button>
+        
+      </form>
+      </div>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+
+  {% endblock %}
