@@ -8,7 +8,7 @@ timenow = datetime.datetime.now()
 displaytimenow  = timenow.strftime("%m-%d-%y %H:%M")
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/a/Desktop/flask_movie/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/a/Desktop/Customers-database/test.db'
 app.config['SECRET_KEY'] = 'super-secret'
 
 app.debug = True
