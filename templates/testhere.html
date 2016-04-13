@@ -1,80 +1,292 @@
-{% extends "layouts/layout1.html" %}
-Active tasks
+<html itemscope="" itemtype="http://schema.org/Service" ng-app="app"><head>
+        <title>Free Invoice Generator by Invoiced</title>
+
+        <meta charset="UTF-8">
+   
+        <link href="static/css/invoicecss.css" type="text/css" rel="stylesheet">
+        <script src="static/js/addrow.js"></script>
+   
+
+    <div class="background"></div>
 
 
-{% block content %}
+    <div class="container scrollable">
+    <div id="static" class="invoice-holder clearfix">
+        <form method="post" action="/pdf" class="form-horizontal" enctype="multipart/form-data">
+            <div class="mobile-btns row visible-xs">
+                <div class="col-xs-6">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Download Invoice
+                    </button>
+                </div>
+            </div>
+
+            <div class="invoice-controls desktop">
+                <div class="btns clearfix">
+                    <p>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">
+                            Download Invoice
+                        </button>
+                    </p>
+                </div>
 
 
+                <div class="panel panel-default">
+                    <div class="panel-heading">Tax</div>
+                    <div class="panel-body">
+                        <select class="form-control" name="fields[tax]">
+                            <option value="%">% Tax</option>
+                            <option value="1">Flat Tax</option>
+                            <option value="0">Off</option>
+                        </select>
+                    </div>
+                </div>
 
-<!-- isotope-->
-<script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js"></script>
-<link href="static/css/isotope.css" rel="stylesheet">
-<script src="static/js/isotope_filters.js"></script>
-<!-- end istope-->
+                <div class="panel panel-default">
+                    <div class="panel-heading">Shipping</div>
+                    <div class="panel-body">
+                        <select class="form-control" name="fields[shipping]">
+                            <option value="1">On</option>
+                            <option value="0">Off</option>
+                        </select>
+                    </div>
+                </div>
 
+                <div class="panel panel-default">
+                    <div class="panel-heading">Discounts</div>
+                    <div class="panel-body">
+                        <select class="form-control" name="fields[discounts]">
+                            <option value="%">% Discount</option>
+                            <option value="1">Flat Discount</option>
+                            <option value="0">Off</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
+            <div class="papers">
+                <div class="invoice">
+                    <div class="two-col clearfix">
+                        <div class="title">
+                            <input type="text" class="form-control input-label" name="header" value="INVOICE">
+                            <div class="subtitle">
+                                <div class="input-group">
+                                    <span class="input-group-addon">#</span>
+                                    <input class="form-control" type="text" name="number">
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="col">
+                            <div class="contact from">
+                                <div class="field">
+                                    <input type="text" class="input-label form-control" name="from_title" value="From">
+                                </div>
+                                <div class="value">
+                                    <textarea class="form-control" placeholder="Who is this invoice from?" name="from"></textarea>
+                                </div>
+                            </div>
 
+                            <div class="contact to">
+                                <div class="field">
+                                    <input type="text" class="input-label form-control" name="to_title" value="Bill To">
+                                </div>
+                                <div class="value">
+                                    <textarea class="form-control" placeholder="Who is this invoice to?" name="to"></textarea>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="col">
+                            <div class="input-group addon-input">
+                                <input class="input-label form-control" type="text" name="date_title" value="Date">
+                                <div class="input-group-addon">
+                                    <input id="invoiceDate" class="form-control datepicker" type="text" name="date" value="Apr 11, 2016">
+                                </div>
+                            </div>
 
+                            <div class="input-group addon-input">
+                                <input class="input-label form-control" type="text" name="due_date_title" value="Due Date">
+                                <div class="input-group-addon">
+                                    <input id="invoiceDueDate" class="form-control datepicker" type="text" name="due_date">
+                                </div>
+                            </div>
 
+                            <div class="input-group addon-input highlight">
+                                <input class="input-label form-control" type="text" name="balance_title" value="Balance">
+                                <div class="input-group-addon value"><span class="currency-symbol">$</span>0</div>
+                            </div>
+                        </div>
+                    </div>
 
-<div class="container">
+                    <div class="items-holder">
+                        <div class="items-table-header">
+                            <div class="amount">
+                                <div class="field bordered">
+                                    <input type="text" class="input-label form-control" value="Amount" name="amount_header">
+                                </div>
+                            </div>
+                            <div class="unit_cost">
+                                <div class="field bordered">
+                                    <input type="text" class="input-label form-control" value="Rate" name="unit_cost_header">
+                                </div>
+                            </div>
+                            <div class="quantity">
+                                <div class="field bordered">
+                                    <input type="text" class="input-label form-control" value="Quantity" name="quantity_header">
+                                </div>
+                            </div>
+                            <div class="name">
+                                <div class="field bordered">
+                                    <input type="text" class="input-label form-control" value="Description" name="item_header">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="items-table">
+                                       <div class="newRow" action="click">Click me</div>
+             
+                                                        <div class="item-row">
+                                <div class="main-row">
+                                    <div class="delete"></div>
+                                    <div class="amount value">
+                                        <span class="currency-symbol">$</span>0
+                                    </div>
+                                    <div class="unit_cost">
+                                        <div class="input-group">
+                                            <span class="input-group-addon currency-sign">$</span>
+                                            <input class="item-calc form-control" type="number" step="any" autocomplete="off" name="items[0][unit_cost]">
+                                        </div>
+                                    </div>
+                                    <div class="quantity">
+                                        <input type="number" step="any" class="item-calc form-control" autocomplete="off" name="items[0][quantity]">
+                                    </div>
+                                    <div class="name">
+                                        <textarea class="item-calc form-control" rows="1" name="items[0][name]" placeholder="Description of item/service..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                                                       
+                                <div class="item-row">
+                                <div class="main-row">
+                                    <div class="delete"></div>
+                                    <div class="amount value">
+                                        <span class="currency-symbol">$</span>0
+                                    </div>
+                                    <div class="unit_cost">
+                                        <div class="input-group">
+                                            <span class="input-group-addon currency-sign">$</span>
+                                            <input class="item-calc form-control" type="number" step="any" autocomplete="off" name="items[3][unit_cost]">
+                                        </div>
+                                    </div>
+                                    <div class="quantity">
+                                        <input type="number" step="any" class="item-calc form-control" autocomplete="off" name="items[3][quantity]">
+                                    </div>
+                                    <div class="name">
+                                        <textarea class="item-calc form-control" rows="1" name="items[3][name]" placeholder="Description of item/service..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+             
+                                <div class="item-row">
+                                <div class="main-row">
+                                    <div class="delete"></div>
+                                    <div class="amount value">
+                                        <span class="currency-symbol">$</span>0
+                                    </div>
+                                    <div class="unit_cost">
+                                        <div class="input-group">
+                                            <span class="input-group-addon currency-sign">$</span>
+                                            <input class="item-calc form-control" type="number" step="any" autocomplete="off" name="items[9][unit_cost]">
+                                        </div>
+                                    </div>
+                                    <div class="quantity">
+                                        <input type="number" step="any" class="item-calc form-control" autocomplete="off" name="items[9][quantity]">
+                                    </div>
+                                    <div class="name">
+                                        <textarea class="item-calc form-control" rows="1" name="items[9][name]" placeholder="Description of item/service..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                                                    </div>
+                    </div>
 
-  <div class="row">
+                    <div class="two-col clearfix">
+                        <div class="col col-offset">
+                            <div class="input-group addon-input">
+                                <input class="input-label form-control" type="text" name="subtotal_title" value="Subtotal">
+                                <div class="input-group-addon value"><span class="currency-symbol">$</span>0</div>
+                            </div>
 
+                            <div class="input-group addon-input">
+                                <input class="input-label form-control" type="text" name="discounts_title" value="Discounts">
+                                <div class="input-group-addon">
+                                    <input type="text" class="form-control" name="discounts">
+                                </div>
+                            </div>
 
-<div class="col-lg-6">
+                            <div class="input-group addon-input">
+                                <input class="input-label form-control" type="text" name="tax_title" value="Tax">
+                                <div class="input-group-addon">
+                                    <input type="text" class="form-control" name="tax">
+                                </div>
+                            </div>
 
-      <h1 class="page-header">Active Tasks</h1>
-      </div>
-          <div class="col-lg-6">
+                            <div class="input-group addon-input">
+                                <input class="input-label form-control" type="text" name="shipping_title" value="Shipping">
+                                <div class="input-group-addon">
+                                    <div class="input-group">
+                                        <span class="input-group-addon currency-sign">$</span>
+                                        <input type="text" class="form-control" name="shipping">
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="input-group addon-input">
+                                <input class="input-label form-control" type="text" name="total_title" value="Total">
+                                <div class="input-group-addon value"><span class="currency-symbol">$</span>0</div>
+                            </div>
 
-<p><input class="page-header" type="text" id="quicksearch" placeholder="Search" /></p>
-</div>
+                            <div class="input-group addon-input">
+                                <input class="input-label form-control" type="text" name="amount_paid_title" value="Amount Paid">
+                                <div class="input-group-addon">
+                                    <div class="input-group">
+                                        <span class="input-group-addon currency-sign">$</span>
+                                        <input type="text" class="form-control" name="amount_paid">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="footer">
+                        <div class="notes-holder">
+                            <div class="field">
+                                <input type="text" class="input-label form-control" name="notes_title" value="Notes">
+                            </div>
+                            <div class="value">
+                                <textarea class="notes form-control" placeholder="Notes - any relevant information not already covered" name="notes"></textarea>
+                            </div>
+                        </div>
+                        <div class="terms-holder">
+                            <div class="field">
+                                <input type="text" class="input-label form-control" name="terms_title" value="Terms">
+                            </div>
+                            <div class="value">
+                                <textarea class="terms form-control" placeholder="Terms and conditions - late fees, payment methods, delivery schedule" name="terms"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
 
-    </div>
-  </div>
-  </div>
-
-
-<div class="container">
-
-  <div class="row">
-    <div class="isotope">
-    {% for myuser in user %}
-
-    <div class="col-lg-3 col-md-4 col-xs-6 thumb element-item  {{ myuser.device }} ">
-
-     <div class="id"> ID:{{ myuser.id }}</div><br>
-        <div class="first_name"> Name:{{ myuser.first_name }}</div>
-
-    <div class="last_name"> lastname:{{ myuser.last_name }}</div>
-
-    <div class="phone"> Phone:{{ myuser.phone }}</div>
-    <div class="device"> Device:{{ myuser.device }}</div>
-
-    <div class="checkin"> Date:{{ myuser.checkin }}</div>
-     <hr>
-     <div class="problem"> probelm:{{ myuser.problem }}</div>
-      <hr>
-
-    
-<form method="Post" action="/active_tasks" >
-
-        <button type="submit" name="submit" style="float: left;" value="{{ myuser.id }}" class="btn btn-defult">Delete</button>
-        <button type="submit" name="submit" style="float: right;" value="Do Something Else" class="btn btn-primary">Invoice</button>
         
-      </form>
-      </div>
-      {% endfor %}
-      </div>
     </div>
-  </div>
 
 
 
-  {% endblock %}
+</body></html>
+
+
+<!-- test -->

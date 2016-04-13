@@ -168,7 +168,15 @@ def deleted_customers():
     elif request.method == 'GET':
         return render_template('deleted_customers.html', user=user)
 
+@app.route('/test')
+def testhere():
+    return render_template("testhere.html")
 
+
+@app.route('/invoice')
+def testhere2():
+    return render_template("invoice.html")
+    
 
 
 if __name__ == "__main__":
