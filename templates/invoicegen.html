@@ -1,0 +1,225 @@
+  <!-- Latest compiled and minified CSS & JS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="static/css/bootstrap-datepicker.min.css">
+    <script src="static/js/bootstrap-datepicker.min.js"></script>
+  <script src="static/js/textarea_autogrow.js"></script>
+
+
+
+  {% macro render_field(field) %}
+  <div class="form-group">
+
+  	{{ field(class="form-control") }}
+  </div>
+  {% endmacro %}
+
+
+
+  {% block content %}
+
+  <style >
+    textarea {
+      resize: none;
+    }
+
+body {
+    background-color: #eee;
+}
+    .hello {
+          padding: 3;
+      background: #fff;
+      border: 1px solid #ccc;
+      -webkit-box-shadow: 1px 1px 0 rgba(0,0,0,.1),3px 3px 0 #fff,4px 4px 0 rgba(0,0,0,.125),6px 6px 0 #fff,7px 7px 0 rgba(0,0,0,.15);
+      -moz-box-shadow:    1px 1px 0 rgba(0,0,0,.1),3px 3px 0 #fff,4px 4px 0 rgba(0,0,0,.125),6px 6px 0 #fff,7px 7px 0 rgba(0,0,0,.15);
+      box-shadow:         1px 1px 0 rgba(0,0,0,.1),3px 3px 0 #fff,4px 4px 0 rgba(0,0,0,.125),6px 6px 0 #fff,7px 7px 0 rgba(0,0,0,.15);
+    }
+  </style>
+
+  <div class="container hello">
+
+  <div class="container">
+  	<div class="row">
+
+
+
+ 
+      <div class="col-xs-8">
+       <h1> My company name or logo</h1>
+
+     </div>
+
+
+
+
+
+     <div class="col-xs-4">
+
+      <h1> Inoivce:# 9999 </h1>
+
+
+
+    </div>
+  </div>
+  </div>
+
+
+
+  <div class="container">
+    <div class="row">
+
+
+
+
+      <div class="col-xs-4">
+
+
+
+        {{  form.bill_to(style="width:100%; border: none;" , placeholder="From who") }}
+        <p> Bill To: </p>
+
+        {{  form.from_who(style="width:100%; border: none;" , placeholder="Bill to") }}
+
+
+
+
+      </div>
+
+
+
+
+      <div class="col-xs-4">
+      </div>
+      <div class="col-xs-4">
+        <label> Date: </label>
+        <div id="datepicker" class="input-group date" data-date-format="mm-dd-yyyy">
+          <input class="form-control" type="text" readonly />
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+
+
+
+      </div>
+
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+
+
+
+
+       <form method="POST"  enctype="multipart/form-data" action="{{ url_for('invoicegen') }}">
+
+
+        <table class="table table-hover  ">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+
+  
+
+            {% for item in form.item_list %}
+
+            <tr>
+              <td style="width:55%">{{ item.item_description(style="width:100%; border: none;" ,placeholder="Descrption") }}</td>
+              <td style="width:15%">{{ item.quantity(style="width:100%; border: none;" ,placeholder="Qantity")}}</td>
+              <td style="width:15%">{{ item.price(style="width:100%; border: none;",class="addme", placeholder="Price")}}</td>
+              <td style="width:15%" >{{ item.total(style="width:100%; border: none;" , placeholder="Total")}}</td>
+
+              {% endfor %}
+            </tbody>
+          </table>
+
+                <div class="container">
+        <div class="row">
+          <div class="col-xs-4">
+
+          {{ form.add_row(class="btn btn-primary")}}
+          </div>
+      <div class="col-xs-8">
+
+      {{ form.over_all_total(style="width:90%; text-align:right; border: none;" , placeholder="Over ALl total")}}
+      </div>
+        </form>
+
+
+      </div>
+    </div>
+  
+  </div>
+
+
+
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12">
+          {{ form.notes(style="width:100%;margin-top: 50px; " , placeholder="Notes")}}
+            
+          </div>
+        
+        </div>
+      </div>
+
+
+
+</div>
+
+
+
+<!-- add up fields -->
+<script type="text/javascript">
+  
+
+function getFields() {
+    var inputs = document.getElementsByTagName('addme'),
+        result = 0;
+    for( var i = 0; i < inputs.length; i++ ) {
+        if( inputs[i].id.indexOf('product_total_price_PRI_') == 0 ) {
+            var num = parseFloat( inputs[i].value );
+            //if it's a valid number add it
+            if( !isNaN( num ) ) result += num;
+        }
+    }
+    alert( result );
+}
+
+</script>
+
+
+
+
+<link rel="stylesheet" type="text/css" media="screen" href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+  
+
+
+
+
+
+  <!-- DATETIME OPTOINS -->
+  <script > $(document).ready(function () {
+    $("#datepicker").datepicker({ 
+      todayHighlight: true
+    }).datepicker('update', new Date());;
+  }); </script>
+
+
+
+
+  {% endblock %}

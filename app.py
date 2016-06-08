@@ -1,14 +1,19 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask import request, redirect, url_for, render_template,flash
-from wtforms import Form, BooleanField, TextField, PasswordField, validators , SubmitField,SelectField,TextAreaField
+from wtforms import Form, BooleanField, TextField, PasswordField, validators , SubmitField,SelectField,TextAreaField,IntegerField,FieldList,FormField
 import datetime
+from googlevoice import Voice
+from googlevoice.util import input
+
+
+
 
 timenow = datetime.datetime.now()
 displaytimenow  = timenow.strftime("%m-%d-%y %H:%M")
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/a/Desktop/Customers-database/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/a/projects/Customers-database/test.db'
 app.config['SECRET_KEY'] = 'super-secret'
 
 app.debug = True
@@ -48,6 +53,24 @@ class Userform(Form):
     submit = SubmitField("ADD")
 
 
+class TelephoneForm(Form):
+    item_description= TextAreaField('des')
+    quantity= IntegerField('quantitiy')
+    price= TextField('price')
+    total= TextField('total')
+
+class ContactForm(Form):
+    item_list = FieldList(FormField(TelephoneForm))
+    add_row = SubmitField('Add row')
+    bill_to= TextAreaField('des')
+    from_who= TextAreaField('des')
+    invoice_number= IntegerField('des')
+    notes = TextAreaField('des')
+    over_all_total = IntegerField('Overall total')
+
+
+
+
 
 
 @app.route('/')
@@ -79,10 +102,20 @@ def active_tasks():
     user = User.query.filter_by(datastate=1)
     if request.method == 'POST':
         if "submit" in request.form:
+            #move to pending cusomters
             task_id = request.form.get("submit","")
             updatehere = User.query.filter_by(id=task_id).first()
             updatehere.datastate = 2
             db.session.commit()
+            print updatehere.phone
+            #snd text msg
+            voice = Voice()
+            voice.login(email="testingapphere",passwd="thisisatestpassword")
+            #input('Number to send message to: ')
+            phoneNumber = "5628790859"
+            text = "Your device is ready"
+            voice.send_sms(phoneNumber, text)
+
             return redirect(url_for("pending_customers"))
         elif "delete" in request.form:
             task_id = request.form.get("delete","")
@@ -168,14 +201,21 @@ def deleted_customers():
     elif request.method == 'GET':
         return render_template('deleted_customers.html', user=user)
 
-@app.route('/test')
-def testhere():
-    return render_template("testhere.html")
+
+    
 
 
-@app.route('/invoice')
-def testhere2():
-    return render_template("invoice.html")
+@app.route('/invoicegen',methods=["GET","POST"])
+def invoicegen():
+    form = ContactForm(request.form)
+    if form.add_row.data:
+        #new_telephone is populated with appended entry
+        new_telephone = form.item_list.append_entry()
+    return render_template('invoicegen.html', form = form)
+
+
+
+
     
 
 
